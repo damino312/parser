@@ -1,0 +1,63 @@
+version: "3"
+services:
+  back:
+    image: node:18
+    ports:
+      - 4000:4000
+    working_dir: /app/back
+    volumes:
+      - ./backend:/app/back
+    environment:
+      MONGO_PORT: 27018 ## порт такой же как у монго
+      MONGO_HOST: mongo-db
+      EXPRESS_PORT: 4000
+      ORIGIN: http://localhost:1111 ## линк до фронта, такой же как порт в nginx
+    networks:
+      - parser
+    depends_on:
+      - mongo-db
+    command: sh -c "npm install  && node index"
+    links:
+      - mongo-db
+    restart: unless-stopped
+
+  mongo-db:
+    image: mongo:latest
+    ports:
+      - 27018:27017 ## порт должен быть как в command: mongod --port 27018
+    networks:
+      - parser
+    command: mongod --port 27018
+    volumes:
+      - ./mongo:/data/db
+      - ./parser.conf:/etc/nginx/conf.d
+    restart: unless-stopped
+
+  front:
+    image: nginx
+    ports:
+      - 1111:80 ## выставить такое же в ORIGIN в беке
+    volumes:
+      - ./frontend:/usr/share/nginx/html
+    working_dir: /usr/share/nginx/html
+    networks:
+      - parser
+    restart: unless-stopped
+
+  parser:
+    image: node:18
+    working_dir: /app/parser
+    volumes:
+      - ./parser:/app/parser
+    environment:
+      MONGO_PORT: 27018 ## порт такой же как у монго
+      MONGO_HOST: mongo-db
+    networks:
+      - parser
+    depends_on:
+      - mongo-db
+    command: sh -c "npm install  && node index"
+    restart: unless-stopped
+
+networks:
+  parser:
