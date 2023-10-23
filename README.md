@@ -1,9 +1,10 @@
 # parser
 My course work where I should make a parser that parses some information from a site. I chose to parse cryptocurrancy on https://coinmarketcap.com/.
 
-FRONT-END: react, tailwind, axios, recharts, module architecture 
-BACK-END: express, mongoose, cors, mongodb.
-PARSER: mongodb, axios, cheerio, mongoose.
+<p>FRONT-END: react, tailwind, axios, recharts, module architecture </p>
+<p>BACK-END: express, mongoose, cors, mongodb.</p>
+<p>PARSER: mongodb, axios, cheerio, mongoose.</p>
+
 
 To run the project you need:
 1. Download docker, docker-compose, hodejs, npm
